@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title th:utext="${title}"></title>
+  </head>
+  
+  <body>
+    <div>
+      <h2>
+        <b>Dobro došli</b>
+      </h2>
+
+      <a th:href="@{/login}">
+        <b>Prijavi se</b>
+      </a>
+    </div>
+  </body>
+</html>
