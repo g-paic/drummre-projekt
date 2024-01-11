@@ -46,7 +46,7 @@ public class MainController {
 	@GetMapping(value = "/song-mood-detection")
 	public String getSongMood() {
 		//send test lyrics
-		String  lyrics = " ";
+		String  lyrics = "djuro ";
 		return songsService.checkLyricsMoodDetection(lyrics);
 	}
 
