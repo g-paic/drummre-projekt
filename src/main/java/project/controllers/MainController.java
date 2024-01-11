@@ -5,13 +5,12 @@ import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import project.deezer.Data;
 import project.deezer.DataSet;
@@ -24,8 +23,10 @@ import project.repositories.DeezerRepository;
 import project.repositories.TrackRepository;
 import project.services.DeezerService;
 import project.services.LastFmService;
+import project.services.SongsService;
 
-@Controller
+@RestController
+@RequiredArgsConstructor
 public class MainController {
 	@Autowired
 	private TrackRepository trackRepo;
@@ -38,6 +39,16 @@ public class MainController {
 	
 	@Autowired
 	private DeezerService deezerService;
+
+	@Autowired
+	private final SongsService songsService;
+
+	@GetMapping(value = "/song-mood-detection")
+	public String getSongMood() {
+		//send test lyrics
+		String  lyrics = " ";
+		return songsService.checkLyricsMoodDetection(lyrics);
+	}
 
 	@RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
 	public String welcomePage(Model model) {
