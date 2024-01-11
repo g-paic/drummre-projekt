@@ -17,7 +17,7 @@ public class Application {
 	public RestTemplate getRestTemplate() {
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.getInterceptors().add((request, body, execution) -> {
-			request.getHeaders().add("Authorization", "Bearer " + openaiApiKey);
+			request.getHeaders().add("Authorization", "Bearer " + "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");
 			return execution.execute(request, body);
 		});
 		return restTemplate;
