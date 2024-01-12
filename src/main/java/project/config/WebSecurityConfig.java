@@ -61,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		http.authorizeRequests()
-			.antMatchers( "/","/login", "/logout","/song-mood-detection", "/oauth/**").permitAll()
+			.antMatchers( "/","/login", "/song-mood-detection", "/logout", "/oauth/**").permitAll()
 			.anyRequest().authenticated()
 			.and()
 			.oauth2Login()
@@ -76,9 +76,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						System.out.println("AuthenticationSuccessHandler invoked");
 						System.out.println("Authentication name: " + authentication.getName());
 						CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
-						
+
 						userService.processOAuthPostLogin(oauthUser);
-						
+
 						System.out.println("--------");
 						System.out.println(oauthUser.getAttributes());
 						System.out.println("--------");

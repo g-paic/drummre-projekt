@@ -43,10 +43,41 @@ public class MainController {
 	@Autowired
 	private final SongsService songsService;
 
+	//for testing purposes
 	@GetMapping(value = "/song-mood-detection")
 	public String getSongMood() {
 		//send test lyrics
-		String  lyrics = "djuro ";
+		String  lyrics = """ 
+    			Mislio si da ću ja zbog tebe seći vene, no, no, no\n" +
+				"Kažu da ti loše ide posle naše veze\n" +
+				"Da te ovih dana rade samo tužne pesme\n" +
+				"Kažu to, pa nisi valjda propao\n" +
+				"Ko bi rek'o da će tako loše da ti krene\n" +
+				"Mislio si da ću ja zbog tebe seći vene\n" +
+				"No, no, no\n" +
+				"Ja otišla, ti ostao\n" +
+				"Nismo bili ista liga, ništa lično\n" +
+				"Zato nađi sebi nešto slično\n" +
+				"A ja sam odlično, jer mi više nije stalo\n" +
+				"A ja sam odlično, da je bolje ne bi valjalo\n" +
+				"A ja sam odlično, a ti pitaj se, budalo\n" +
+				"Da li te u meni ostalo\n" +
+				"Malo, malo, malo\n" +
+				"Kažu da te pola nema, da si svoja sena\n" +
+				"Kad te pitaju za mene zaplačeš k'o žena\n" +
+				"Kažu to, jedva si preživeo\n" +
+				"Ko bi rek'o da će tako loše da ti krene\n" +
+				"Mislio si da ću ja zbog tebe seći vene\n" +
+				"No, no, no\n" +
+				"Ja otišla, ti ostao\n" +
+				"Nismo bili ista liga, ništa lično\n" +
+				"Zato nađi sebi nešto slično\n" +
+				"A ja sam odlično, jer mi više nije stalo\n" +
+				"A ja sam odlično, da je bolje ne bi valjalo\n" +
+				"A ja sam odlično, a ti pitaj se budalo\n" +
+				"Da li te u meni ostalo\n" +
+				"Malo, malo, malo
+				""";
 		return songsService.checkLyricsMoodDetection(lyrics);
 	}
 

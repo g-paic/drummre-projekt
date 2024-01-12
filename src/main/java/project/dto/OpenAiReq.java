@@ -20,6 +20,8 @@ public class OpenAiReq {
 
     public OpenAiReq(String model, String prompt) {
         this.model = model;
+        this.n = 1;
+        this.temperature = 1;
 
         this.messages = new ArrayList<>();
         this.messages.add(new Message("user", prompt));
