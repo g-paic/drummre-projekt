@@ -1,5 +1,6 @@
 package project;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,6 +17,7 @@ public class Application {
 	private String openaiApiKey;
 
 	@Bean
+	@Qualifier("openaiRestTemplate")
 	public RestTemplate getRestTemplate() {
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.getInterceptors().add((request, body, execution) -> {
@@ -24,6 +26,7 @@ public class Application {
 		});
 		return restTemplate;
 	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}

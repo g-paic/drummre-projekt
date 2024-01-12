@@ -1,7 +1,9 @@
 package project.controllers;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -25,7 +27,7 @@ import project.services.DeezerService;
 import project.services.LastFmService;
 import project.services.SongsService;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class MainController {
 	@Autowired
@@ -79,6 +81,15 @@ public class MainController {
 				"Malo, malo, malo
 				""";
 		return songsService.checkLyricsMoodDetection(lyrics);
+	}
+
+	@GetMapping(value= "/spotify")
+	public String getSocialSongData() throws IOException {
+		List<String> list = List.of("3TljdWrXAgrEnyU00PM6CQ");
+		System.out.println("i am here");
+		songsService.getSocialDataForMoodDetection(list);
+		return "welcomePage";
+
 	}
 
 	@RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)

@@ -61,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		http.authorizeRequests()
-			.antMatchers( "/","/login", "/song-mood-detection", "/logout", "/oauth/**").permitAll()
+			.antMatchers( "/","/login","/spotify",  "/song-mood-detection", "/logout", "/oauth/**").permitAll()
 			.anyRequest().authenticated()
 			.and()
 			.oauth2Login()
