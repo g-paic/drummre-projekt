@@ -2,11 +2,9 @@ package project.controllers;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -14,93 +12,64 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import project.deezer.Data;
-import project.deezer.DataSet;
-import project.entities.DeezerEntity;
-import project.entities.TrackEntity;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import project.entities.SongEntity;
 import project.forms.CustomOAuth2User;
-import project.lastfm.Track;
-import project.lastfm.TracksResponse;
-import project.repositories.DeezerRepository;
-import project.repositories.TrackRepository;
-import project.services.DeezerService;
-import project.services.LastFmService;
+import project.services.SongSocialDataService;
 import project.services.SongsService;
+import project.services.UserService;
 
 @Controller
 @RequiredArgsConstructor
 public class MainController {
-	@Autowired
-	private TrackRepository trackRepo;
-	
-	@Autowired
-	private DeezerRepository deezerRepo;
-	
-	@Autowired
-	private LastFmService lastFmService;
-	
-	@Autowired
-	private DeezerService deezerService;
 
 	@Autowired
 	private final SongsService songsService;
 
-	//for testing purposes
-	@GetMapping(value = "/song-mood-detection")
-	public String getSongMood() {
-		//send test lyrics
-		String  lyrics = """ 
-    			Mislio si da ću ja zbog tebe seći vene, no, no, no\n" +
-				"Kažu da ti loše ide posle naše veze\n" +
-				"Da te ovih dana rade samo tužne pesme\n" +
-				"Kažu to, pa nisi valjda propao\n" +
-				"Ko bi rek'o da će tako loše da ti krene\n" +
-				"Mislio si da ću ja zbog tebe seći vene\n" +
-				"No, no, no\n" +
-				"Ja otišla, ti ostao\n" +
-				"Nismo bili ista liga, ništa lično\n" +
-				"Zato nađi sebi nešto slično\n" +
-				"A ja sam odlično, jer mi više nije stalo\n" +
-				"A ja sam odlično, da je bolje ne bi valjalo\n" +
-				"A ja sam odlično, a ti pitaj se, budalo\n" +
-				"Da li te u meni ostalo\n" +
-				"Malo, malo, malo\n" +
-				"Kažu da te pola nema, da si svoja sena\n" +
-				"Kad te pitaju za mene zaplačeš k'o žena\n" +
-				"Kažu to, jedva si preživeo\n" +
-				"Ko bi rek'o da će tako loše da ti krene\n" +
-				"Mislio si da ću ja zbog tebe seći vene\n" +
-				"No, no, no\n" +
-				"Ja otišla, ti ostao\n" +
-				"Nismo bili ista liga, ništa lično\n" +
-				"Zato nađi sebi nešto slično\n" +
-				"A ja sam odlično, jer mi više nije stalo\n" +
-				"A ja sam odlično, da je bolje ne bi valjalo\n" +
-				"A ja sam odlično, a ti pitaj se budalo\n" +
-				"Da li te u meni ostalo\n" +
-				"Malo, malo, malo
-				""";
-		return songsService.checkLyricsMoodDetection(lyrics);
+	@Autowired
+	private final UserService userService;
+
+	@Autowired
+	private final SongSocialDataService songSocialDataService;
+
+	//fetching list of songs based on mood
+	@GetMapping(value= "/dashboard")
+	public String getSocialSongData(@RequestParam("mood") String mood, RedirectAttributes redirectAttributes, Model model) throws IOException {
+		List<SongEntity> songList = songsService.fetchSongsForGivenUserMoodData(mood);
+		redirectAttributes.addFlashAttribute("suggestedList", songList);
+		//todo: what to send on frontend, mapping and add to model
+		return "redirect:dashboard";
 	}
 
-	@GetMapping(value= "/spotify")
-	public String getSocialSongData() throws IOException {
-		List<String> list = List.of("3TljdWrXAgrEnyU00PM6CQ");
-		System.out.println("i am here");
-		songsService.getSocialDataForMoodDetection(list);
-		return "welcomePage";
-
+	@GetMapping("/dashboard")
+	public String getDashboard(Model model, Principal principal) throws Exception {
+		if(principal != null) {
+			CustomOAuth2User auth2User = (CustomOAuth2User) ((Authentication) principal).getPrincipal();
+			List<SongEntity> favouritedSongs = userService.getFavouritedSongs(auth2User.getEmail());
+			//todo: mapping to DTO object
+			model.addAttribute("likedSongs", favouritedSongs);
+			model.addAttribute("name", auth2User.getName());
+			model.addAttribute("gmail", auth2User.getEmail());
+			return "dashboardPage";
+		} else {
+			return "redirect:login";
+		}
 	}
 
-	@RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
-	public String welcomePage(Model model) {
-		model.addAttribute("title", "Dobro došli");
-		return "welcomePage";
+	@GetMapping("/dashboard/social-data")
+	public String getDashBoardWithSocialData(Model model, Principal principal) {
+		return "dashboardPage";
 	}
+
+//	@RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
+//	public String welcomePage(Model model) {
+//		model.addAttribute("title", "Dobro došli");
+//		return "welcomePage";
+//	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginPage(Model model) {
-		return "loginPage";
+		return "login";
 	}
 
 	@RequestMapping(value = "/profil", method = RequestMethod.GET)
@@ -112,77 +81,5 @@ public class MainController {
 		
 		return "profilPage";
 	}
-	
-	@RequestMapping(value = "/lastfm/{tag}", method = RequestMethod.GET)
-    public String getTopTracksForTag(Model model, @PathVariable("tag") String tag) {
-    	TracksResponse tracksResponse = lastFmService.getTracksFromUrl(tag);
-    	Track[] tracks = tracksResponse.getTracks().getTrack();
-    	Set<TrackEntity> set = new LinkedHashSet<>();
-    	
-    	for(Track track: tracks) {
-    		TrackEntity existTrackEntity = null;
-    		
-    		try {
-    			existTrackEntity = trackRepo.getTrackByName(track.getName()).get();
-    		} catch(NoSuchElementException no) {
-    			existTrackEntity = null;
-    		}
-    		
-    		if(existTrackEntity == null) {
-	    		TrackEntity trackEntity = new TrackEntity();
-	    		trackEntity.setName(track.getName());
-	    		trackEntity.setDuration(track.getDuration());
-	    		trackEntity.setMbid(track.getMbid());
-	    		trackEntity.setUrl(track.getUrl());
-	    		trackEntity.setArtist(track.getArtist().getName());
-	    		trackEntity.setTag(tag);
-	    		
-	    		trackRepo.save(trackEntity);
-	    		set.add(trackEntity);
-    		} else {
-    			set.add(existTrackEntity);
-    		}
-    	}
-    	
-    	model.addAttribute("tag", tag);
-    	model.addAttribute("list", set);
-    	
-    	return "tracks";
-    }
-	
-	@RequestMapping(value = "/deezer/{artist}", method = RequestMethod.GET)
-    public String getTheSongsOfTheSinger(Model model, @PathVariable("artist") String artist) {
-		DataSet dataSet = deezerService.getDataFromUrl(artist);
-		Data[] data = dataSet.getData();
-    	Set<DeezerEntity> set = new LinkedHashSet<>();
-    	
-    	for(Data song: data) {
-    		DeezerEntity existDeezerEntity = null;
-    		try {
-    			existDeezerEntity = deezerRepo.getDeezerByTitle(song.getTitle()).get();
-    		} catch(NoSuchElementException no) {
-    			existDeezerEntity = null;
-    		}
-    		
-    		if(existDeezerEntity == null) {
-    			DeezerEntity deezerEntity = new DeezerEntity();
-    			deezerEntity.setTitle(song.getTitle());
-    			deezerEntity.setDuration(song.getDuration());
-    			deezerEntity.setPreview(song.getPreview());
-    			deezerEntity.setMd5_image(song.getMd5_image());
-    			deezerEntity.setAlbum(song.getAlbum().getTitle());
-    			deezerEntity.setArtist(artist);
-	    		
-    			deezerRepo.save(deezerEntity);
-    			set.add(deezerEntity);
-    		} else {
-    			set.add(existDeezerEntity);
-    		}
-    	}
-    	
-    	model.addAttribute("artist", artist);
-    	model.addAttribute("list", set);
-    	
-    	return "deezer";
-    }
+
 }
