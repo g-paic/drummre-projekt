@@ -112,7 +112,19 @@ public class MainController {
 		
 		return "profilPage";
 	}
-	
+
+	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+	public String dashboard(Model model, Principal principal) {
+		CustomOAuth2User auth2User = (CustomOAuth2User) ((Authentication) principal).getPrincipal();
+
+		model.addAttribute("email", auth2User.getEmail());
+		model.addAttribute("name", auth2User.getName());
+		model.addAttribute("movie", auth2User.getName());
+
+		return "dashboardPage";
+	}
+
+
 	@RequestMapping(value = "/lastfm/{tag}", method = RequestMethod.GET)
     public String getTopTracksForTag(Model model, @PathVariable("tag") String tag) {
     	TracksResponse tracksResponse = lastFmService.getTracksFromUrl(tag);
