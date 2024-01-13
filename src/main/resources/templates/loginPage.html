@@ -4,11 +4,11 @@
         <title>Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <base href="/">
-        <link rel="stylesheet" type="text/css" href="../static/style/main.css" />
-        <link rel="stylesheet" type="text/css" href="../static/style/google.css" />
+        <link rel="stylesheet" type="text/css" th:href="@{/style/main.css}" />
+        <link rel="stylesheet" type="text/css" th:href="@{/style/google.css}" />
     </head>
     <body>
-    <div className='containerLogin'>
+    <div class="containerLogin">
         <h1>Mudzong</h1>
         <a class="gsi-material-button" th:href="@{/oauth2/authorization/google}">
             <div class="gsi-material-button-state"></div>

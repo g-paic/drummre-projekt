@@ -51,7 +51,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		return authProvider;
 	}
-
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(authenticationProvider());
@@ -61,8 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		http.authorizeRequests()
-			.antMatchers( "/","/login","/spotify",  "/song-mood-detection", "/logout", "/oauth/**", "/resources/**").permitAll()
-			.anyRequest().authenticated()
+			.antMatchers( "/","/login","/spotify",  "/song-mood-detection", "/profil", "/logout", "/oauth/**", "/resources/**").permitAll()
+			.anyRequest().anonymous()
 			.and()
 			.oauth2Login()
 				.loginPage("/login")
