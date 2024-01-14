@@ -5,30 +5,29 @@
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description"
-          content="This is a bootstrap dashboard example, plus live date via Spring-Boot & Thymeleaf">
-    <meta name="author"
-          content="Uncle Otto">
-
     <title>MudZong</title>
     <base href="/">
     <link rel="stylesheet" th:href="@{/style/style.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+
 </head>
 <body>
-<input type="checkbox" id="check">
-<label for="check">
-    <i class="fas fa-bars" id="btn"></i>
-    <i class="fas fa-times" id="cancel"></i>
-</label>
 <div class="sidebar">
-    <img th:src="@{/img/logomudzong.png}" width="50%">
-    <header>MudZong</header>
+    <header>
+        <div>
+            <div style="padding-top: 2rem">
+                <img th:src="@{/img/logomudzong.png}" width="40%">
+            </div>
+            <div>
+                <h3>MudZong</h3>
+            </div>
+        </div>
+    </header>
     <ul>
-        <li><a href="#"><i class="fas fa-qrcode"></i>Moj profil</a></li>
-        <li><a href="#"><i class="fas fa-link"></i>Raspoloženje</a></li>
-        <li><a href="#"><i class="fas fa-stream"></i>Top liste</a></li>
-        <li><a href="#"><i class="fas fa-calendar-week"></i>O podacima</a></li>
+        <li id="selected"><a href="/dashboard"><i class="fas fa-qrcode"></i>Moj profil</a></li>
+        <li><a href="/dashboard/survey"><i class="fas fa-link"></i>Raspoloženje</a></li>
+        <li><a href="/dashboard/social-data"><i class="fas fa-stream"></i>Top liste</a></li>
+        <li><a href="/dashboard/info"><i class="fas fa-calendar-week"></i>O podacima</a></li>
         <li><a href="/logout"><i class="far fa-question-circle"></i>Odjavi me</a></li>
     </ul>
 </div>

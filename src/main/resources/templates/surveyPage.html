@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>MudZong</title>
+    <base href="/">
+    <link rel="stylesheet" th:href="@{/style/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+
+    <style>
+        div.gallery {
+          margin: 5px;
+          border: 1px solid #ccc;
+          float: left;
+          width: 200px;
+          height: 300px;
+          padding: 1 rem;
+        }
+
+        div.gallery:hover {
+          border: 1px solid #777;
+        }
+
+        div.gallery img {
+          width: 100%;
+          height: 90%;
+        }
+
+    </style>
+</head>
+<body>
+<div class="sidebar">
+    <header>
+        <div>
+            <div style="padding-top: 2rem">
+                <img th:src="@{/img/logomudzong.png}" width="40%">
+            </div>
+            <div>
+                <h3>MudZong</h3>
+            </div>
+        </div>
+    </header>
+    <ul>
+        <li><a href="/dashboard"><i class="fas fa-qrcode"></i>Moj profil</a></li>
+        <li id="selected"><a href="/dashboard/survey"><i class="fas fa-link"></i>Raspoloženje</a></li>
+        <li><a href="/dashboard/social-data"><i class="fas fa-stream"></i>Top liste</a></li>
+        <li><a href="/dashboard/info"><i class="fas fa-calendar-week"></i>O podacima</a></li>
+        <li><a href="/logout"><i class="far fa-question-circle"></i>Odjavi me</a></li>
+    </ul>
+</div>
+<section style="padding-left: 20rem; padding-top: 3rem; padding-right: 3rem" >
+    <h1>Anketa raspoloženja</h1>
+    <h4>Molimo odaberite šest (6) od ponuđene 24 slike koje najbolje prezentiraju vaše trenutno raspoloženje.</h4>
+    <form th:action="@{/dashboard/survey-results}">
+        <div>
+            <input type="submit" value="Potvrdi odabir">
+        </div>
+        <div class="gallery">
+            <input type="checkbox" id="happy3" name="mood" value="happy">
+            <img src="/img/DALL-happy-3.png" alt="happy" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="anger2" name="mood" value="anger">
+            <img src="/img/anger_split_image_2.png" alt="Anger2" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="happy1" name="mood" value="happy">
+            <img src="/img/DALL-happy-1.png" alt="happy" height="600" width="500">
+            </input>
+        </div>
+
+
+        <div class="gallery">
+            <input type="checkbox" id="fear2" name="mood" value="fear">
+            <img src="/img/fear_split_image_2.png" alt="fear" height="600" width="500">
+            </input>
+        </div>
+
+
+        <div class="gallery">
+            <input type="checkbox" id="anger6" name="mood" value="anger">
+            <img src="/img/anger_split_image_6.png" alt="Anger6" height="600" width="500">
+            </input>
+        </div>
+
+
+        <div class="gallery">
+            <input type="checkbox" id="anger1" name="mood" value="anger">
+            <img src="/img/anger_split_image_1.png" alt="Anger1" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="happy2" name="mood" value="happy">
+            <img src="/img/DALL-happy-2.png" alt="happy" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="fear5" name="mood" value="fear">
+            <img src="/img/fear_split_image_5.png" alt="fear" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="anger5" name="mood" value="anger">
+            <img src="/img/anger_split_image_5.png" alt="Anger5" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="happy4" name="mood" value="happy">
+            <img src="/img/DALL-happy-4.png" alt="happy" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="fear3" name="mood" value="fear">
+            <img src="/img/fear_split_image_3.png" alt="fear" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="happy5" name="mood" value="happy">
+            <img src="/img/DALL-happy-5.png" alt="happy" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="sad4" name="mood" value="sad">
+            <img src="/img/sadness_split_image_4.png" alt="sad" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="happy6" name="mood" value="happy">
+            <img src="/img/DALL-happy-6.png" alt="happy" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="fear1" name="mood" value="fear">
+            <img src="/img/fear_split_image_1.png" alt="fear" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="sad6" name="mood" value="sad">
+            <img src="/img/sadness_split_image_6.png" alt="sad" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="anger4" name="mood" value="anger">
+            <img src="/img/anger_split_image_4.png" alt="Anger4" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="fear4" name="mood" value="fear">
+            <img src="/img/fear_split_image_4.png" alt="fear" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="sad3" name="mood" value="sad">
+            <img src="/img/sadness_split_image_3.png" alt="sad" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="fear6" name="mood" value="fear">
+            <img src="/img/fear_split_image_6.png" alt="fear" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="sad1" name="mood" value="sad">
+            <img src="/img/sadness_split_image_1.png" alt="sad" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="anger3" name="mood" value="anger">
+            <img src="/img/anger_split_image_3.png" alt="Anger3" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="sad2" name="mood" value="sad">
+            <img src="/img/sadness_split_image_2.png" alt="sad" height="600" width="500">
+            </input>
+        </div>
+
+        <div class="gallery">
+            <input type="checkbox" id="sad5" name="mood" value="sad">
+            <img src="/img/sadness_split_image_5.png" alt="sad" height="600" width="500">
+            </input>
+        </div>
+    </form>
+
+</section>
+</body>
+</html>
