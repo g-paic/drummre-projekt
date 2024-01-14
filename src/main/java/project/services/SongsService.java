@@ -2,6 +2,8 @@ package project.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import project.dto.SpotifyResp;
+import project.entities.SongEntity;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,7 +13,9 @@ public interface SongsService {
 
     String checkLyricsMoodDetection(String songLyrics);
 
-     void getSocialDataForMoodDetection(List<String> songIds) throws IOException;
+    List<SongEntity> getSocialDataForMoodDetection(List<SongEntity> songs) throws IOException;
+
+     List<SongEntity> fetchSongsForGivenUserMoodData(String mood) throws IOException;
 
 
 }

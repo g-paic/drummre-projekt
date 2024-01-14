@@ -2,6 +2,7 @@ package project.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import project.entities.SongEntity;
 
 import java.util.List;
 
@@ -9,5 +10,5 @@ import java.util.List;
 @Setter
 public class SpotifyResp {
 
-    public List<SongMoodData> audio_features;
+    public List<SongEntity> audio_features;
 }

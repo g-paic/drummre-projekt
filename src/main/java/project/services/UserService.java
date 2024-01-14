@@ -1,13 +1,18 @@
 package project.services;
 
+import java.util.*;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import project.entities.SongEntity;
 import project.entities.User;
 import project.forms.CustomOAuth2User;
 import project.forms.Provider;
+import project.repositories.SongRepository;
 import project.repositories.UserRepository;
 
 @Service
@@ -15,6 +20,9 @@ public class UserService {
 
 	@Autowired
 	private UserRepository repo;
+
+	@Autowired
+	private SongRepository songRepository;
 	
 	public void processOAuthPostLogin(CustomOAuth2User oauthUser) {
 		User existUser = null;
@@ -42,4 +50,22 @@ public class UserService {
 			System.out.println("Created new user: " + oauthUser.getEmail());
 		}
 	}
+
+    public List<SongEntity> getFavouritedSongs(String userName) {
+		User user = repo.findByUsername(userName);
+		List<SongEntity> returnList = new ArrayList<>();
+//		user.setLikedSongs(List.of("0017A6SJgTbfQVU2EtsPNo"));
+//		repo.save(user);
+		user.getLikedSongs().forEach(songId -> {
+            try {
+                SongEntity song = songRepository.findBySpotifyId(songId).orElseThrow(() -> new Exception("wrong song id"));
+				returnList.add(song);
+            } catch (Exception e) {
+				System.out.println(e.getMessage());
+            }
+
+        });
+		return returnList;
+
+    }
 }

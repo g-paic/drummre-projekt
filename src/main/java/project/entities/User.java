@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import project.forms.Provider;
 
+import java.util.List;
+
 @Document(collection = "users")
 public class User {
 	@Id
@@ -18,7 +20,18 @@ public class User {
 	private String username;
 	private String password;
 	private boolean enabled;
-	
+
+
+	private List<String> likedSongs;
+
+	public List<String> getLikedSongs() {
+		return likedSongs;
+	}
+
+	public void setLikedSongs(List<String> likedSongs) {
+		this.likedSongs = likedSongs;
+	}
+
 	@Enumerated(EnumType.STRING)
 	private Provider provider;
 

@@ -8,4 +8,6 @@ import project.entities.User;
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
     public Optional<User> getUserByUsername(String username);
+
+    User findByUsername(String userName);
 }

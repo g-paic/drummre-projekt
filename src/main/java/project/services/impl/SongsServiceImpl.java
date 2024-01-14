@@ -4,7 +4,6 @@ package project.services.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,20 +12,21 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 import project.dto.AccessTokenSpotify;
 import project.dto.OpenAiReq;
 import project.dto.OpenAiResp;
 import project.dto.SpotifyResp;
 import project.entities.SongEntity;
+import project.repositories.SongRepository;
 import project.services.SongsService;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,9 +55,30 @@ public class SongsServiceImpl implements SongsService {
 
     //common question for openai api
     private static final String QUESTION = """ 
-            answer me on this question. What is the mood of this song lyrics %s ? A: happy, B:sad, C:calm, D:energetic ?, one word answer""";
+            answer me on this question. What is the mood of this song lyrics %s ? A: Happy, B: Sad, C: Calm, D: Energetic ?, one word answer""";
 
-    public void determineMoodsOfSongs() {
+
+    @Autowired
+    private SongRepository songRepository;
+    public List<SongEntity> fetchSongsForGivenUserMoodData(String mood) throws IOException {
+        List<SongEntity> songs = songRepository.findAll();
+        //first of all check if exist songs which mood is not calculated
+        List<SongEntity> songsWithoutMoodCalculated = songs.stream().filter(song -> song.getMood() == null).collect(Collectors.toList());
+        if(!songsWithoutMoodCalculated.isEmpty()) {
+            // check spotify social data if they are fetched form spotify api
+            songs = songs.stream().filter(song -> song.getAcousticness() == null).collect(Collectors.toList());
+            //fetched song data for mood calculation and stored to database
+            songRepository.saveAll(getSocialDataForMoodDetection(songs));
+
+            songs = songRepository.findAll();
+            songs =  songs.stream().filter(song -> song.getMood() == null).collect(Collectors.toList());
+            //todo: calculate mood for new songs in database
+        }
+        //fetch songs with given mood
+        songs = songRepository.findAllByMood(mood);
+//      songs.forEach(song -> System.out.println(song.toString()));
+        return songs;
+
 
     }
 
@@ -65,8 +86,6 @@ public class SongsServiceImpl implements SongsService {
     @Override
     public String checkLyricsMoodDetection(String songLyrics) {
         String prompt = String.format(QUESTION, songLyrics);
-//        System.out.println("---Song lyrics is---");
-//        System.out.println(songLyrics);
         OpenAiReq openAiReq = new OpenAiReq(model, prompt);
         OpenAiResp response = restTemplate.postForObject(url, openAiReq, OpenAiResp.class);
         if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
@@ -80,7 +99,7 @@ public class SongsServiceImpl implements SongsService {
 
 
     //connect to spotify api
-    public void getSocialDataForMoodDetection(List<String> songIds) throws IOException {
+    public List<SongEntity> getSocialDataForMoodDetection(List<SongEntity> songs) throws IOException {
         restTemplateSpotify = new RestTemplate();
         String accessToken = getSpotifyAccessToken();
         HttpHeaders headers = new HttpHeaders();
@@ -88,12 +107,19 @@ public class SongsServiceImpl implements SongsService {
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.add("Authorization", "Bearer " +  accessToken);
         HttpEntity<String> req = new HttpEntity<String>(headers);
+        List<String> songIds = songs.stream()
+                .map(SongEntity::getSpotifyId).collect(Collectors.toList());
         StringBuilder sb = new StringBuilder();
         for (int i = 0 ; i < songIds.size(); i++) {
-            sb.append(songIds.get(i));
-            if(i != songIds.size() - 1) {
-                sb.append(",");
+            if(i < 100) {
+                sb.append(songIds.get(i));
+                if(i != Math.min(songIds.size(), 100) - 1 ) {
+                    sb.append(",");
+                }
+            } else {
+                break;
             }
+
         }
         String endpoint = "https://api.spotify.com/v1/audio-features/?ids=" + sb.toString();
         ResponseEntity<String> response = restTemplateSpotify.exchange(endpoint, HttpMethod.GET, req, String.class);
@@ -101,9 +127,27 @@ public class SongsServiceImpl implements SongsService {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        SpotifyResp songs = objectMapper.readValue( response.getBody(), SpotifyResp.class);
-        songs.getAudio_features().forEach(s -> System.out.println("energy " + s.getEnergy()));
+        SpotifyResp songResp = objectMapper.readValue( response.getBody(), SpotifyResp.class);
+        songResp.getAudio_features().forEach(el -> System.out.println(el.getAcousticness()));
+        List<SongEntity> returnList = songResp.getAudio_features();
+        for(int i = 0 ; i < songResp.getAudio_features().size(); i++) {
+            returnList.get(i).setArtist(songs.get(i).getArtist());
+            returnList.get(i).setAlbum(songs.get(i).getAlbum());
+            returnList.get(i).setLength(songs.get(i).getLength());
+            returnList.get(i).setName(songs.get(i).getName());
+            returnList.get(i).setRelease_date(songs.get(i).getRelease_date());
+            returnList.get(i).setPopularity(songs.get(i).getPopularity());
+
+        }
+
+        System.out.println("songs after fetching mood data");
+        System.out.println(returnList.get(0).toString());
+//        returnList.forEach(el -> System.out.println(el.toString()));
+
+        return returnList;
+
     }
+
 
 
     //returns access token for spotify api
