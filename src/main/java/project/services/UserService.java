@@ -54,17 +54,20 @@ public class UserService {
     public List<SongEntity> getFavouritedSongs(String userName) {
 		User user = repo.findByUsername(userName);
 		List<SongEntity> returnList = new ArrayList<>();
-//		user.setLikedSongs(List.of("0017A6SJgTbfQVU2EtsPNo"));
-//		repo.save(user);
-		user.getLikedSongs().forEach(songId -> {
-            try {
-                SongEntity song = songRepository.findBySpotifyId(songId).orElseThrow(() -> new Exception("wrong song id"));
-				returnList.add(song);
-            } catch (Exception e) {
-				System.out.println(e.getMessage());
-            }
+		if(user.getLikedSongs() != null) {
+			user.getLikedSongs().forEach(songId -> {
+				try {
+					SongEntity song = songRepository.findBySpotifyId(songId).orElseThrow(() -> new Exception("wrong song id"));
+					returnList.add(song);
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
 
-        });
+			});
+		} else {
+			new ArrayList<>();
+		}
+
 		return returnList;
 
     }
