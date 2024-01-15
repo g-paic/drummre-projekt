@@ -24,10 +24,10 @@
         </div>
     </header>
     <ul>
-        <li id="selected"><a style="text-decoration: none" href="/dashboard"><i class="fas fa-cube"></i>Moj profil</a></li>
+        <li><a style="text-decoration: none" href="/dashboard"><i class="fas fa-cube"></i>Moj profil</a></li>
         <li><a style="text-decoration: none" href="/dashboard/survey"><i class="fas fa-question"></i>Raspoloženje</a></li>
         <li><a style="text-decoration: none" href="/dashboard/social-data"><i class="fas fa-stream"></i>Top liste</a></li>
-        <li><a style="text-decoration: none" href="/dashboard/info"><i class="fas fa-info-circle"></i>O podacima</a></li>
+        <li id="selected"><a style="text-decoration: none" href="/dashboard/info"><i class="fas fa-info-circle"></i>O podacima</a></li>
         <li><a style="text-decoration: none" href="/logout"><i class="fas fa-sign-out-alt"></i>Odjavi me</a></li>
     </ul>
 </div>
@@ -35,15 +35,59 @@
     <div class="grid3">
         <div class="person">
             <div class="photo-container">
-                <img th:src="${/img/logomudzong.png}" th:width="200px" src="">
+                <h1 class="title" >MudZong</h1>
             </div>
         </div>
         <div class="content mygrid personalinfo">
-            <h2 class="title" th:text="${name}">Ime Prezime</h2>
+            <img th:src="@{/img/logomudzong.png}" th:width="200px" src="">
         </div>
         <div class="content mygrid amounts">
             <div class="social-description">
-                <h3 th:text="${gmail}"></h3>
+                <h2 class="title" >Aplikacija za preporuku pjesama na temelju raspoloženja</h2>
+            </div>
+        </div>
+    </div>
+    <div class="grid3">
+        <div class="person">
+            <div class="social-description">
+                <h2>18.000+</h2>
+                <p>pjesama s podacima o raspoloženju, akustici i ugođaju</p>
+            </div>
+        </div>
+        <div class="content mygrid amounts">
+            <div class="social-description">
+                <h2>15.000+</h2>
+                <p>pjesama s analiziranim tekstovima</p>
+            </div>
+        </div>
+        <div class="content mygrid personalinfo">
+            <div class="social-description">
+                <h2>4</h2>
+                <p>najveće glazbene platforme korištene za društvene podatke</p>
+            </div>
+        </div>
+    </div>
+    <div class="grid3">
+        <div class="content mygrid personalinfo">
+            <div class="social-description">
+                <h1>NAŠ TIM</h1>
+            </div>
+        </div>
+    </div>
+    <div class="grid3">
+        <div class="person">
+            <div class="social-description">
+                <h2>Filip Bura</h2>
+            </div>
+        </div>
+        <div class="content mygrid personalinfo">
+            <div class="social-description">
+                <h2>Luka Gjurić</h2>
+            </div>
+        </div>
+        <div class="content mygrid amounts">
+            <div class="social-description">
+                <h2>Gabriel Paić</h2>
             </div>
         </div>
     </div>

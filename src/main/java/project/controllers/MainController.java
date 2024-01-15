@@ -121,10 +121,8 @@ public class MainController {
 		return "loginPage";
 	}
 
-	@RequestMapping(value = "/dashboard/info", method = RequestMethod.GET)
-	public String userInfo(Model model, Principal principal) {
-		CustomOAuth2User auth2User = (CustomOAuth2User) ((Authentication) principal).getPrincipal();
-		
+	@GetMapping("/dashboard/info")
+	public String getInfo(Model model, Principal principal) {
 		return "infoPage";
 	}
 

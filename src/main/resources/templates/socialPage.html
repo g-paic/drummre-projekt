@@ -31,108 +31,110 @@
         <li><a style="text-decoration: none" href="/logout"><i class="fas fa-sign-out-alt"></i>Odjavi me</a></li>
     </ul>
 </div>
-<section style="padding-left: 20rem; padding-top: 3rem; padding-right: 3rem" >
+<section style="padding-left: 20rem; padding-top: 3rem; padding-right: 3rem; padding-bottom: 3rem" >
     <div class="grid2">
         <div class="person">
-            <h2>Moje omiljene pjesme</h2>
-            <table th:if="${not #lists.isEmpty(likedSongs)}" class="table table-primary table-striped table-hover">
+            <h2>Top liste na različitim platformama</h2>
+            <a class="btn btn-primary" href='javascript:spotify()'>Spotify</a>
+            <a class="btn btn-primary" href='javascript:deezer()'>Deezer</a>
+            <a class="btn btn-primary" href='javascript:shazam()'>Shazam</a>
+            <a class="btn btn-primary" href='javascript:apple()'>Apple</a>
+            <h4 id="naslov">Spotify</h4>
+            <table class="table table-primary table-striped table-hover">
                 <thead>
                 <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Artist</th>
-                    <th scope="col">Release date</th>
-                    <th scope="col">Popularity</th>
-                    <th scope="col">Lyrics</th>
-                    <th scope="col">Like</th>
+                    <th scope="col">Ime pjesme</th>
+                    <th scope="col">Spotify playliste</th>
+                    <th scope="col">Spotify Rang</th>
+                    <th scope="col">Streams</th>
+                    <th scope="col">Apple playliste</th>
+                    <th scope="col">Apple Rang</th>
+                    <th scope="col">Deezer playliste</th>
+                    <th scope="col">Deezer Rang</th>
+                    <th scope="col">Shazam Rang</th>
                 </tr>
                 </thead>
-                <tbody th:each="listing : ${likedSongs}" >
-                <tr>
-                    <td th:text="${listing.name}"></td>
-                    <td th:text="${listing.artist}"></td>
-                    <td th:text="${listing.release_date}"></td>
-                    <td th:text="${listing.popularity}"></td>
-                    <td><button  type="button" th:data-songs="${listing.lyrics}" class="open-addMovieModal btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMovieModal" data-toggle="tooltip"  title="Songs">Dohvati tekst</button></td>
-                    <td><a value="Tekst" class="btn btn-primary">Dodaj u omiljene</a></td>
+                <tbody>
+                <tr id="listapjesamaspotify" th:each="listing : ${spotifyList}" th:hidden=false>
+                    <td th:text="${listing.songName}"></td>
+                    <td th:text="${listing.in_spotify_playlists}"></td>
+                    <td th:text="${listing.in_spotify_charts}"></td>
+                    <td th:text="${listing.streams}"></td>
+                    <td th:text="${listing.in_apple_playlists}"></td>
+                    <td th:text="${listing.in_apple_charts}"></td>
+                    <td th:text="${listing.in_deezer_playlists}"></td>
+                    <td th:text="${listing.in_deezer_charts}"></td>
+                    <td th:text="${listing.in_shazam_charts}"></td>
+                </tr>
+                <tr id="listapjesamaapple" th:each="listing : ${appleList}" th:hidden=true >
+                    <td th:text="${listing.songName}"></td>
+                    <td th:text="${listing.in_spotify_playlists}"></td>
+                    <td th:text="${listing.in_spotify_charts}"></td>
+                    <td th:text="${listing.streams}"></td>
+                    <td th:text="${listing.in_apple_playlists}"></td>
+                    <td th:text="${listing.in_apple_charts}"></td>
+                    <td th:text="${listing.in_deezer_playlists}"></td>
+                    <td th:text="${listing.in_deezer_charts}"></td>
+                    <td th:text="${listing.in_shazam_charts}"></td>
+                </tr>
+                <tr id="listapjesamadeezer" th:each="listing : ${deezerList}" th:hidden=true>
+                    <td th:text="${listing.songName}"></td>
+                    <td th:text="${listing.in_spotify_playlists}"></td>
+                    <td th:text="${listing.in_spotify_charts}"></td>
+                    <td th:text="${listing.streams}"></td>
+                    <td th:text="${listing.in_apple_playlists}"></td>
+                    <td th:text="${listing.in_apple_charts}"></td>
+                    <td th:text="${listing.in_deezer_playlists}"></td>
+                    <td th:text="${listing.in_deezer_charts}"></td>
+                    <td th:text="${listing.in_shazam_charts}"></td>
                 </tr>
                 </tbody>
-
+            </table>
         </div>
 
         <div class="content mygrid amounts">
-            <h2>Moje omiljene pjesme</h2>
-            <table th:if="${not #lists.isEmpty(likedSongs)}" class="table table-primary table-striped table-hover">
-                <thead>
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Artist</th>
-                    <th scope="col">Release date</th>
-                    <th scope="col">Popularity</th>
-                    <th scope="col">Lyrics</th>
-                    <th scope="col">Like</th>
-                </tr>
-                </thead>
-                <tbody th:each="listing : ${likedSongs}" >
-                <tr>
-                    <td th:text="${listing.name}"></td>
-                    <td th:text="${listing.artist}"></td>
-                    <td th:text="${listing.release_date}"></td>
-                    <td th:text="${listing.popularity}"></td>
-                    <td><button  type="button" th:data-songs="${listing.lyrics}" class="open-addMovieModal btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMovieModal" data-toggle="tooltip"  title="Songs">Dohvati tekst</button></td>
-                    <td><a value="Tekst" class="btn btn-primary">Dodaj u omiljene</a></td>
-                </tr>
-                </tbody>
-
-        </div>
-    </div>
-
-    </table>
-    <div th:if="${#lists.isEmpty(likedSongs)}" class="alert alert-primary" role="alert">
-        Nemate spremljenih omiljenih pjesama!
-    </div>
-
-    <h2>Preporučene pjesme</h2>
-    <table th:if="${not #lists.isEmpty(relatedSongs)}" class="table table-primary table-striped table-hover">
-        <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Artist</th>
-            <th scope="col">Release date</th>
-            <th scope="col">Popularity</th>
-            <th scope="col">Lyrics</th>
-            <th scope="col">Like</th>
-        </tr>
-        </thead>
-        <tbody th:each="listing : ${relatedSongs}" >
-        <tr>
-            <td th:text="${listing.name}"></td>
-            <td th:text="${listing.artist}"></td>
-            <td th:text="${listing.release_date}"></td>
-            <td th:text="${listing.popularity}"></td>
-            <td><button  type="button" th:data-songs="${listing.lyrics}" class="open-addMovieModal btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMovieModal" data-toggle="tooltip"  title="Songs">Dohvati tekst</button></td>
-            <td><a value="Tekst" class="btn btn-primary">Dodaj u omiljene</a></td>
-        </tr>
-        </tbody>
-
-    </table>
-    <div th:if="${#lists.isEmpty(relatedSongs)}" class="alert alert-primary" role="alert">
-        Nemate još preporučenih pjesama!
-    </div>
-    <div class="modal fade" id="addMovieModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Top songs</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <!--
+            <h2>Izvođači</h2>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Dropdown button
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <th:block th:each="listing : ${socialDataMap.keySet()}">
+                        <a th:text="${listing}" class="dropdown-item" href="#">Tekst</a>
+                    </th:block>
                 </div>
-                <div class="modal-body">
-                    <p id="song"></p>
-                </div>
-
             </div>
+            -->
         </div>
     </div>
 
 </section>
+<script>
+    function spotify() {
+        document.getElementById('listapjesamaspotify').hidden = false;
+        document.getElementById('listapjesamaapple').hidden = true;
+        document.getElementById('listapjesamadeezer').hidden = true;
+        document.getElementById('naslov').innerHTML  = "Spotify";
+      }
+    function apple() {
+        document.getElementById('listapjesamaspotify').hidden = true;
+        document.getElementById('listapjesamaapple').hidden = false;
+        document.getElementById('listapjesamadeezer').hidden = true;
+        document.getElementById('naslov').innerHTML  = "Apple";
+      }
+    function deezer() {
+        document.getElementById('listapjesamaspotify').hidden = true;
+        document.getElementById('listapjesamaapple').hidden = true;
+        document.getElementById('listapjesamadeezer').hidden = false;
+        document.getElementById('naslov').innerHTML  = "Deezer";
+      }
+     function shazam() {
+        document.getElementById('listapjesamaspotify').hidden = false;
+        document.getElementById('listapjesamaapple').hidden = true;
+        document.getElementById('listapjesamadeezer').hidden = true;
+        document.getElementById('naslov').innerHTML  = "Shazam";
+      }
+</script>
 </body>
 </html>
