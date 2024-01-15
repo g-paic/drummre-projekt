@@ -93,19 +93,76 @@
         </div>
 
         <div class="content mygrid amounts">
-            <!--
-            <h2>Izvođači</h2>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Dropdown button
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <th:block th:each="listing : ${socialDataMap.keySet()}">
-                        <a th:text="${listing}" class="dropdown-item" href="#">Tekst</a>
-                    </th:block>
-                </div>
-            </div>
-            -->
+            <h2>Liste pjesama po izvođačima</h2>
+            <a class="btn btn-primary" href='javascript:dojaCat()'>DojaCat</a>
+            <a class="btn btn-primary" href='javascript:taylorSwift()'>Taylor Swift</a>
+            <a class="btn btn-primary" href='javascript:edSheeran()'>Ed Sheeran</a>
+            <a class="btn btn-primary" href='javascript:theWeeknd()'>The Weeknd</a>
+            <h4 id="user">Spotify</h4>
+            <table class="table table-primary table-striped table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Ime pjesme</th>
+                    <th scope="col">Spotify playliste</th>
+                    <th scope="col">Spotify Rang</th>
+                    <th scope="col">Streams</th>
+                    <th scope="col">Apple playliste</th>
+                    <th scope="col">Apple Rang</th>
+                    <th scope="col">Deezer playliste</th>
+                    <th scope="col">Deezer Rang</th>
+                    <th scope="col">Shazam Rang</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr id="listapjesamadojacat" th:each="listing : ${dojaCatList}" th:hidden=false>
+                    <td th:text="${listing.songName}"></td>
+                    <td th:text="${listing.in_spotify_playlists}"></td>
+                    <td th:text="${listing.in_spotify_charts}"></td>
+                    <td th:text="${listing.streams}"></td>
+                    <td th:text="${listing.in_apple_playlists}"></td>
+                    <td th:text="${listing.in_apple_charts}"></td>
+                    <td th:text="${listing.in_deezer_playlists}"></td>
+                    <td th:text="${listing.in_deezer_charts}"></td>
+                    <td th:text="${listing.in_shazam_charts}"></td>
+                </tr>
+                <tr id="listapjesamataylorswift" th:each="listing : ${taylorSwiftList}" th:hidden=true >
+                    <td th:text="${listing.songName}"></td>
+                    <td th:text="${listing.in_spotify_playlists}"></td>
+                    <td th:text="${listing.in_spotify_charts}"></td>
+                    <td th:text="${listing.streams}"></td>
+                    <td th:text="${listing.in_apple_playlists}"></td>
+                    <td th:text="${listing.in_apple_charts}"></td>
+                    <td th:text="${listing.in_deezer_playlists}"></td>
+                    <td th:text="${listing.in_deezer_charts}"></td>
+                    <td th:text="${listing.in_shazam_charts}"></td>
+                </tr>
+                <tr id="listapjesamaedsheeran" th:each="listing : ${edSheeranList}" th:hidden=true>
+                    <td th:text="${listing.songName}"></td>
+                    <td th:text="${listing.in_spotify_playlists}"></td>
+                    <td th:text="${listing.in_spotify_charts}"></td>
+                    <td th:text="${listing.streams}"></td>
+                    <td th:text="${listing.in_apple_playlists}"></td>
+                    <td th:text="${listing.in_apple_charts}"></td>
+                    <td th:text="${listing.in_deezer_playlists}"></td>
+                    <td th:text="${listing.in_deezer_charts}"></td>
+                    <td th:text="${listing.in_shazam_charts}"></td>
+                </tr>
+                <tr id="listapjesamatheweeknd" th:each="listing : ${theWeekndList}" th:hidden=true>
+                    <td th:text="${listing.songName}"></td>
+                    <td th:text="${listing.in_spotify_playlists}"></td>
+                    <td th:text="${listing.in_spotify_charts}"></td>
+                    <td th:text="${listing.streams}"></td>
+                    <td th:text="${listing.in_apple_playlists}"></td>
+                    <td th:text="${listing.in_apple_charts}"></td>
+                    <td th:text="${listing.in_deezer_playlists}"></td>
+                    <td th:text="${listing.in_deezer_charts}"></td>
+                    <td th:text="${listing.in_shazam_charts}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+
+
         </div>
     </div>
 
@@ -135,6 +192,31 @@
         document.getElementById('listapjesamadeezer').hidden = true;
         document.getElementById('naslov').innerHTML  = "Shazam";
       }
+
+    function dojaCat() {
+        document.getElementById('listapjesamataylorswift').hidden = false;
+        document.getElementById('listapjesamaedsheeran').hidden = true;
+        document.getElementById('listapjesamatheweeknd').hidden = true;
+        document.getElementById('naslov').innerHTML  = "Doja Cat";
+    }
+    function taylorSwift() {
+        document.getElementById('listapjesamadojacat').hidden = true;
+        document.getElementById('listapjesamaedsheeran').hidden = false;
+        document.getElementById('listapjesamatheweeknd').hidden = true;
+        document.getElementById('naslov').innerHTML  = "Taylor Swift";
+    }
+    function edSheeran() {
+        document.getElementById('listapjesamadojacat').hidden = true;
+        document.getElementById('listapjesamataylorswift').hidden = true;
+        document.getElementById('listapjesamatheweeknd').hidden = false;
+        document.getElementById('naslov').innerHTML  = "Ed Sheeran";
+    }
+    function theWeeknd() {
+        document.getElementById('listapjesamadojacat').hidden = false;
+        document.getElementById('listapjesamataylorswift').hidden = true;
+        document.getElementById('listapjesamaedsheeran').hidden = true;
+        document.getElementById('naslov').innerHTML  = "The Weeknd";
+    }
 </script>
 </body>
 </html>

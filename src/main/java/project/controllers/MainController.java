@@ -2,6 +2,7 @@ package project.controllers;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -101,8 +102,19 @@ public class MainController {
 
 		//map that contains artist name as key and list of songs with social data as value
 		Map<String, List<SongSocialRespDto>> socialDataMap = songSocialDataService.getSongSocialData();
+		Map<String, List<SongSocialRespDto>> returnMap =socialDataMap.entrySet().stream().filter(el -> el.getValue().size() > 5).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, LinkedHashMap::new)) ;
+		returnMap.entrySet().forEach(el -> System.out.println(el.getKey()));
+		System.out.println("length of reeturn map is" + returnMap.keySet().size());
+		List<SongSocialRespDto> dojaCatList = returnMap.get("Doja Cat");
+		List<SongSocialRespDto> taylorSwift = returnMap.get("Taylor Swift");
+		List<SongSocialRespDto> edSheeran = returnMap.get("Ed Sheeran");
+		List<SongSocialRespDto> theWeeknd = returnMap.get("The Weeknd");
 
-		model.addAttribute("socialDataMap", socialDataMap);
+		model.addAttribute("dojaCatList", dojaCatList);
+		model.addAttribute("taylorSwiftList", taylorSwift);
+		model.addAttribute("edSheeranList", edSheeran);
+		model.addAttribute("theWeekndList", theWeeknd);
+//		model.addAttribute("socialDataMap", socialDataMap);
 		model.addAttribute("spotifyList", spotifyList);
 		model.addAttribute("appleList", appleList);
 		model.addAttribute("deezerList", deezerList);
