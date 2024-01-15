@@ -110,9 +110,10 @@ public class MainController {
 	}
 
 	//:todo get meta data controller
-//	public String getMetaData() {
-//
-//	}
+	public String getMetaData() {
+
+		return "metaDataPage";
+	}
 
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
