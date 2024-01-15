@@ -9,6 +9,8 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class SongRespDto {
 
+    private String id;
+
     private String name;
     private String artist;
 

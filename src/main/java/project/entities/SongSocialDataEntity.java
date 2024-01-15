@@ -13,7 +13,7 @@ public class SongSocialDataEntity {
     @Id
     private String _id;
     private String name;
-    private String artists_name;
+    private String artists;
     private String artist_count;
 
     private String in_spotify_playlists;

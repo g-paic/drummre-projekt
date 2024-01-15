@@ -12,9 +12,13 @@ public interface SongRepository extends MongoRepository<SongEntity, String> {
 
     List<SongEntity> findAll();
 
+    List<SongEntity> findByOrderByEnergyDesc();
+
 
 
     List<SongEntity> findAllByMood(String mood);
 
     Optional<SongEntity> findBySpotifyId(String songId);
+
+   List< SongEntity> findByArtist(String name);
 }

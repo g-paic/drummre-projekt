@@ -22,9 +22,7 @@ import project.repositories.SongRepository;
 import project.services.SongsService;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -60,8 +58,11 @@ public class SongsServiceImpl implements SongsService {
 
     @Autowired
     private SongRepository songRepository;
-    public List<SongEntity> fetchSongsForGivenUserMoodData(String mood) throws IOException {
+    public List<SongEntity> fetchSongsForGivenUserMoodData(List<String> moods) throws IOException {
+        List<SongEntity> suggestedSongBasedOnMood = calculateMood(moods);
         List<SongEntity> songs = songRepository.findAll();
+        int count = songs.stream().filter(song -> song.getSpotifyId().length() != 22).collect(Collectors.toList()).size();
+        System.out.println("count = " + count);
         //first of all check if exist songs which mood is not calculated
         List<SongEntity> songsWithoutMoodCalculated = songs.stream().filter(song -> song.getMood() == null).collect(Collectors.toList());
         if(!songsWithoutMoodCalculated.isEmpty()) {
@@ -74,12 +75,81 @@ public class SongsServiceImpl implements SongsService {
             songs =  songs.stream().filter(song -> song.getMood() == null).collect(Collectors.toList());
             //todo: calculate mood for new songs in database
         }
-        //fetch songs with given mood
-        songs = songRepository.findAllByMood(mood);
-//      songs.forEach(song -> System.out.println(song.toString()));
-        return songs;
+        return suggestedSongBasedOnMood;
 
 
+    }
+
+    private List<SongEntity> calculateMood(List<String> moods) {
+        //calculate mood
+        Map<String, Integer> mapSongs = new HashMap<>();
+        moods.forEach(mood -> {
+            if(mapSongs.get(mood) == null) {
+                mapSongs.put(mood, 1);
+            } else {
+                mapSongs.put(mood, mapSongs.get(mood) + 1);
+            }
+        });
+        List<String> maxMoods= new ArrayList<>();
+        Optional<Integer> maxCount = mapSongs.values().stream().max((i, j) -> i.compareTo(j));
+        mapSongs.entrySet().forEach(el -> {
+            if(el.getValue() == maxCount.get()) {
+                maxMoods.add(el.getKey());
+            }
+        });
+        List<SongEntity> returnList = new ArrayList<>();
+        maxMoods.forEach(el ->  {
+            List<SongEntity> list = songRepository.findAllByMood(el);
+            List<SongEntity> currList = null;
+            if(list.size()- 11 >= 0) {
+                int x = randomRangeRandom(0, list.size()-11);
+                 currList = list.subList(x, x + (10/maxMoods.size()));
+            } else {
+                 currList = list.subList(0, (10/maxMoods.size()));
+            }
+
+            returnList.addAll(currList);
+        });
+        return returnList;
+
+    }
+
+    @Override
+    public List<SongEntity> getRelatedSongsForLikedSongs(List<SongEntity> listSongs) {
+        List<SongEntity> returnList = new ArrayList<>();
+        listSongs.forEach(song -> {
+            //first of all try to fetch same artist songs
+            if(returnList.size() < 10) {
+                List<SongEntity> songEntityList = songRepository.findByArtist(song.getName());
+                if(songEntityList != null && songEntityList.size() > 1) {
+                        songEntityList.forEach(song2 -> {
+                            if(!song2.getSpotifyId().equals(song.getSpotifyId())) {
+                                if(returnList.size() < 10) {
+                                    System.out.println("Added song by artist name " + song2.getArtist());
+                                    returnList.add(song2);
+                                }
+
+                            }
+                        });
+                }
+
+            }
+
+        });
+        int n = 10 - returnList.size();
+        //try to add songs with same energy
+        List<SongEntity> songEntityList = songRepository.findByOrderByEnergyDesc();
+        for(int i = 0 ; i < Math.min(n, listSongs.size()) ; i++) {
+            for(int j = 0 ; j < songEntityList.size() ; j++) {
+                if(Double.parseDouble(songEntityList.get(j).getEnergy()) == Double.parseDouble(listSongs.get(i).getEnergy())) {
+                    System.out.println("Added song by energy " + songEntityList.get(j + 1).getEnergy());
+                    returnList.add(songEntityList.get(j + 1));
+                    break;
+                }
+            }
+        }
+
+        return returnList;
     }
 
     //function that returns mood of given lyrics song
@@ -170,5 +240,11 @@ public class SongsServiceImpl implements SongsService {
         }
 
         return null;
+    }
+
+    public int randomRangeRandom(int start, int end) {
+        Random random = new Random();
+        int number = random.nextInt((end - start) + 1) + start; // see explanation below
+        return number;
     }
 }

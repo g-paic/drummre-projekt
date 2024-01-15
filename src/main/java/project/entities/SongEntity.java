@@ -21,6 +21,7 @@ public class SongEntity {
                 ", name='" + name + '\'' +
                 ", album='" + album + '\'' +
                 ", artist='" + artist + '\'' +
+                ", spotifyId='" + spotifyId + '\'' +
                 ", release_date='" + release_date + '\'' +
                 ", popularity='" + popularity + '\'' +
                 ", length='" + length + '\'' +

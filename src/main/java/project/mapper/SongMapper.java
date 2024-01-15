@@ -11,6 +11,7 @@ public class SongMapper {
         songRespDto.setName(songEntity.getName());
         songRespDto.setLyrics(songEntity.getLyrics());
         songRespDto.setRelease_date(songEntity.getRelease_date());
+        songRespDto.setId(songEntity.getSpotifyId());
         return songRespDto;
     }
 }

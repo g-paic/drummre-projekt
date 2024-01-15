@@ -15,7 +15,9 @@ public interface SongsService {
 
     List<SongEntity> getSocialDataForMoodDetection(List<SongEntity> songs) throws IOException;
 
-     List<SongEntity> fetchSongsForGivenUserMoodData(String mood) throws IOException;
+     List<SongEntity> fetchSongsForGivenUserMoodData(List<String> mood) throws IOException;
+
+     List<SongEntity> getRelatedSongsForLikedSongs(List<SongEntity> likedSongList);
 
 
 }
