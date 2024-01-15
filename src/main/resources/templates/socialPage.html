@@ -24,52 +24,67 @@
         </div>
     </header>
     <ul>
-        <li id="selected"><a style="text-decoration: none" href="/dashboard"><i class="fas fa-cube"></i>Moj profil</a></li>
+        <li><a style="text-decoration: none" href="/dashboard"><i class="fas fa-cube"></i>Moj profil</a></li>
         <li><a style="text-decoration: none" href="/dashboard/survey"><i class="fas fa-question"></i>Raspoloženje</a></li>
-        <li><a style="text-decoration: none" href="/dashboard/social-data"><i class="fas fa-stream"></i>Top liste</a></li>
+        <li id="selected"><a style="text-decoration: none" href="/dashboard/social-data"><i class="fas fa-stream"></i>Top liste</a></li>
         <li><a style="text-decoration: none" href="/dashboard/info"><i class="fas fa-info-circle"></i>O podacima</a></li>
         <li><a style="text-decoration: none" href="/logout"><i class="fas fa-sign-out-alt"></i>Odjavi me</a></li>
     </ul>
 </div>
 <section style="padding-left: 20rem; padding-top: 3rem; padding-right: 3rem" >
-    <div class="grid3">
+    <div class="grid2">
         <div class="person">
-            <div class="photo-container">
-                <img th:src="${pictureLink}" th:width="120px" alt="Circle Image" class="rounded-circle"
-                     src="">
-            </div>
+            <h2>Moje omiljene pjesme</h2>
+            <table th:if="${not #lists.isEmpty(likedSongs)}" class="table table-primary table-striped table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Artist</th>
+                    <th scope="col">Release date</th>
+                    <th scope="col">Popularity</th>
+                    <th scope="col">Lyrics</th>
+                    <th scope="col">Like</th>
+                </tr>
+                </thead>
+                <tbody th:each="listing : ${likedSongs}" >
+                <tr>
+                    <td th:text="${listing.name}"></td>
+                    <td th:text="${listing.artist}"></td>
+                    <td th:text="${listing.release_date}"></td>
+                    <td th:text="${listing.popularity}"></td>
+                    <td><button  type="button" th:data-songs="${listing.lyrics}" class="open-addMovieModal btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMovieModal" data-toggle="tooltip"  title="Songs">Dohvati tekst</button></td>
+                    <td><a value="Tekst" class="btn btn-primary">Dodaj u omiljene</a></td>
+                </tr>
+                </tbody>
+
         </div>
-        <div class="content mygrid personalinfo">
-            <h2 class="title" th:text="${name}">Ime Prezime</h2>
-        </div>
+
         <div class="content mygrid amounts">
-            <div class="social-description">
-                <h3 th:text="${gmail}"></h3>
-            </div>
+            <h2>Moje omiljene pjesme</h2>
+            <table th:if="${not #lists.isEmpty(likedSongs)}" class="table table-primary table-striped table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Artist</th>
+                    <th scope="col">Release date</th>
+                    <th scope="col">Popularity</th>
+                    <th scope="col">Lyrics</th>
+                    <th scope="col">Like</th>
+                </tr>
+                </thead>
+                <tbody th:each="listing : ${likedSongs}" >
+                <tr>
+                    <td th:text="${listing.name}"></td>
+                    <td th:text="${listing.artist}"></td>
+                    <td th:text="${listing.release_date}"></td>
+                    <td th:text="${listing.popularity}"></td>
+                    <td><button  type="button" th:data-songs="${listing.lyrics}" class="open-addMovieModal btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMovieModal" data-toggle="tooltip"  title="Songs">Dohvati tekst</button></td>
+                    <td><a value="Tekst" class="btn btn-primary">Dodaj u omiljene</a></td>
+                </tr>
+                </tbody>
+
         </div>
     </div>
-    <h2>Moje omiljene pjesme</h2>
-    <table th:if="${not #lists.isEmpty(likedSongs)}" class="table table-primary table-striped table-hover">
-        <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Artist</th>
-            <th scope="col">Release date</th>
-            <th scope="col">Popularity</th>
-            <th scope="col">Lyrics</th>
-            <th scope="col">Like</th>
-        </tr>
-        </thead>
-        <tbody th:each="listing : ${likedSongs}" >
-        <tr>
-            <td th:text="${listing.name}"></td>
-            <td th:text="${listing.artist}"></td>
-            <td th:text="${listing.release_date}"></td>
-            <td th:text="${listing.popularity}"></td>
-            <td><button  type="button" th:data-songs="${listing.lyrics}" class="open-addMovieModal btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMovieModal" data-toggle="tooltip"  title="Songs">Dohvati tekst</button></td>
-            <td><a value="Tekst" class="btn btn-primary">Dodaj u omiljene</a></td>
-        </tr>
-        </tbody>
 
     </table>
     <div th:if="${#lists.isEmpty(likedSongs)}" class="alert alert-primary" role="alert">

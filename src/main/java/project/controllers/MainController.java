@@ -106,7 +106,7 @@ public class MainController {
 		model.addAttribute("spotifyList", spotifyList);
 		model.addAttribute("appleList", appleList);
 		model.addAttribute("deezerList", deezerList);
-		return "dashboardPage";
+		return "socialPage";
 	}
 
 	//:todo get meta data controller
@@ -120,14 +120,11 @@ public class MainController {
 		return "loginPage";
 	}
 
-	@RequestMapping(value = "/profil", method = RequestMethod.GET)
+	@RequestMapping(value = "/dashboard/info", method = RequestMethod.GET)
 	public String userInfo(Model model, Principal principal) {
 		CustomOAuth2User auth2User = (CustomOAuth2User) ((Authentication) principal).getPrincipal();
 		
-		model.addAttribute("email", auth2User.getEmail());
-		model.addAttribute("name", auth2User.getName());
-		
-		return "profilPage";
+		return "infoPage";
 	}
 
 }
